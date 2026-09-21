@@ -1,26 +1,224 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #080808;
+  --foreground: #f5f5f5;
+  --spotify-green: #1db954;
+  --spotify-green-bright: #1ed760;
+  --spotify-dark: #121212;
+  --spotify-card: #181818;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-spotify: #1db954;
+  --color-spotify-bright: #1ed760;
+  --font-sans: var(--font-inter);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Custom animation timings */
+  --animate-slide-in-right: slide-in-right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-out-right: slide-out-right 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-fade-in: fade-in 0.4s ease-out;
+  --animate-fade-in-up: fade-in-up 0.5s ease-out;
+  --animate-shimmer: shimmer 2s infinite;
+  --animate-progress-pulse: progress-pulse 1.5s ease-in-out infinite;
+  --animate-bounce-subtle: bounce-subtle 2.5s infinite;
+  --animate-glow: glow 4s ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── Custom Animations ──────────────────────────────────────────────── */
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-out-right {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes progress-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes bounce-subtle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes glow {
+  0%, 100% {
+    filter: brightness(1) blur(90px);
+    opacity: 0.35;
+  }
+  50% {
+    filter: brightness(1.4) blur(110px);
+    opacity: 0.55;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(29, 185, 84, 0.4), 0 0 30px rgba(29, 185, 84, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(30, 215, 96, 0.7), 0 0 60px rgba(29, 185, 84, 0.35);
+  }
+}
+
+/* ── Spotify Glowing Aesthetic Utilities ─────────────────────────────── */
+
+.spotify-glow {
+  box-shadow: 0 0 20px rgba(29, 185, 84, 0.45), 0 0 45px rgba(29, 185, 84, 0.18);
+}
+
+.spotify-glow-lg {
+  box-shadow: 0 0 35px rgba(30, 215, 96, 0.6), 0 0 75px rgba(29, 185, 84, 0.25);
+}
+
+.spotify-glow-sm {
+  box-shadow: 0 0 12px rgba(29, 185, 84, 0.4);
+}
+
+.spotify-text-glow {
+  text-shadow: 0 0 16px rgba(30, 215, 96, 0.65);
+}
+
+.spotify-border-glow {
+  border-color: rgba(29, 185, 84, 0.5);
+  box-shadow: 0 0 20px rgba(29, 185, 84, 0.25), inset 0 0 15px rgba(29, 185, 84, 0.1);
+}
+
+.spotify-btn-glow {
+  background: linear-gradient(135deg, #1ed760 0%, #1db954 100%);
+  box-shadow: 0 0 20px rgba(29, 185, 84, 0.4);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.spotify-btn-glow:hover {
+  background: linear-gradient(135deg, #22e268 0%, #1ed760 100%);
+  box-shadow: 0 0 30px rgba(30, 215, 96, 0.7), 0 0 60px rgba(29, 185, 84, 0.3);
+  transform: scale(1.02);
+}
+
+.spotify-card {
+  background: rgba(18, 18, 18, 0.7);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.spotify-card:hover {
+  background: rgba(24, 24, 24, 0.85);
+  border-color: rgba(29, 185, 84, 0.35);
+  box-shadow: 0 0 25px rgba(29, 185, 84, 0.12);
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-heavy {
+  background: rgba(18, 18, 18, 0.85);
+  backdrop-filter: blur(35px);
+  -webkit-backdrop-filter: blur(35px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-dark {
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ── Scrollbar Styling ──────────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(29, 185, 84, 0.3);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(30, 215, 96, 0.6);
+  box-shadow: 0 0 10px rgba(29, 185, 84, 0.5);
+}
+
+/* ── Custom Selection ───────────────────────────────────────────────── */
+
+::selection {
+  background: rgba(29, 185, 84, 0.35);
+  color: #1ed760;
+}
+
+/* ── Progress Bar ───────────────────────────────────────────────────── */
+
+.progress-bar {
+  background: linear-gradient(
+    90deg,
+    #1db954 0%,
+    #1ed760 40%,
+    #82f5a6 60%,
+    #1ed760 80%,
+    #1db954 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+  box-shadow: 0 0 15px rgba(29, 185, 84, 0.5);
 }
