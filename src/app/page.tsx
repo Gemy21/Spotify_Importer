@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import {
   Search, Loader2, Music, Download, Settings, X,
   Disc3, ListMusic, User, AudioLines,
-  CheckCircle2, AlertCircle, Clock, Filter,
+  CheckCircle2, AlertCircle, Clock, Filter, Heart,
 } from 'lucide-react';
 
 // ── Types ──────────────────────────────────────────────────────────────
@@ -193,6 +193,109 @@ function SettingsDrawer({
   );
 }
 
+function LikedSongsGuideModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  if (!open) return null;
+
+  return (
+    <>
+      <div
+        className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 transition-opacity animate-fade-in cursor-pointer"
+        onClick={onClose}
+      />
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none">
+        <div
+          className="relative w-full max-w-lg bg-[#121212] border border-[#1db954]/40 rounded-2xl shadow-[0_0_50px_rgba(29,185,84,0.25)] overflow-hidden animate-fade-in-up pointer-events-auto"
+          onClick={e => e.stopPropagation()}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between p-5 border-b border-white/10 bg-white/[0.02]">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-[#1db954]/20 border border-[#1db954]/40 flex items-center justify-center shadow-[0_0_12px_rgba(29,185,84,0.35)]">
+                <Heart className="w-5 h-5 text-[#1ed760] fill-[#1ed760]/30" />
+              </div>
+              <div>
+                <h2 className="text-base font-bold text-white">Download Your Liked Songs</h2>
+                <p className="text-xs text-white/50">Follow these 3 simple steps in Spotify</p>
+              </div>
+            </div>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-white/10 rounded-xl transition-colors text-white/60 hover:text-white cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* Content */}
+          <div className="p-5 space-y-4 max-h-[75vh] overflow-y-auto">
+            <div className="bg-[#1db954]/[0.08] border border-[#1db954]/30 rounded-xl p-3.5 text-xs text-white/80 leading-relaxed">
+              Spotify treats your <strong>Liked Songs</strong> as a private library. To download all of them at once, copy them into a playlist (takes 10 seconds)!
+            </div>
+
+            {/* Method 1: Desktop */}
+            <div className="space-y-2">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#1ed760] flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#1ed760]" />
+                Method 1: Spotify Desktop / Web (Takes 10 Seconds)
+              </span>
+              <div className="space-y-2 text-xs text-white/70">
+                <div className="flex items-start gap-2.5 p-2.5 rounded-lg bg-white/[0.03] border border-white/5">
+                  <span className="w-5 h-5 rounded-full bg-white/10 text-white flex items-center justify-center font-bold text-[10px] flex-shrink-0 mt-0.5">1</span>
+                  <p>Open Spotify on PC/Mac, click <strong>Liked Songs</strong> on the left sidebar.</p>
+                </div>
+                <div className="flex items-start gap-2.5 p-2.5 rounded-lg bg-white/[0.03] border border-white/5">
+                  <span className="w-5 h-5 rounded-full bg-white/10 text-white flex items-center justify-center font-bold text-[10px] flex-shrink-0 mt-0.5">2</span>
+                  <p>Click any song, then press <kbd className="px-1.5 py-0.5 rounded bg-black/60 border border-white/20 text-white font-mono text-[10px]">Ctrl + A</kbd> (or <kbd className="px-1.5 py-0.5 rounded bg-black/60 border border-white/20 text-white font-mono text-[10px]">Cmd + A</kbd>) to select all 600+ songs.</p>
+                </div>
+                <div className="flex items-start gap-2.5 p-2.5 rounded-lg bg-white/[0.03] border border-white/5">
+                  <span className="w-5 h-5 rounded-full bg-white/10 text-white flex items-center justify-center font-bold text-[10px] flex-shrink-0 mt-0.5">3</span>
+                  <p>Right-click any selected song &rarr; <strong>Add to playlist</strong> &rarr; <strong>Create playlist</strong>.</p>
+                </div>
+                <div className="flex items-start gap-2.5 p-2.5 rounded-lg bg-white/[0.03] border border-white/5">
+                  <span className="w-5 h-5 rounded-full bg-white/10 text-white flex items-center justify-center font-bold text-[10px] flex-shrink-0 mt-0.5">4</span>
+                  <p>Right-click your new playlist &rarr; <strong>Share</strong> &rarr; <strong>Copy link to playlist</strong> and paste it above!</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Method 2: Mobile */}
+            <div className="space-y-2 pt-2 border-t border-white/10">
+              <span className="text-xs font-bold uppercase tracking-wider text-purple-400 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
+                Method 2: Spotify Mobile App
+              </span>
+              <div className="space-y-2 text-xs text-white/70">
+                <div className="flex items-start gap-2.5 p-2.5 rounded-lg bg-white/[0.03] border border-white/5">
+                  <span className="w-5 h-5 rounded-full bg-white/10 text-white flex items-center justify-center font-bold text-[10px] flex-shrink-0 mt-0.5">1</span>
+                  <p>Open the Spotify app &rarr; <strong>Your Library</strong> &rarr; <strong>Liked Songs</strong>.</p>
+                </div>
+                <div className="flex items-start gap-2.5 p-2.5 rounded-lg bg-white/[0.03] border border-white/5">
+                  <span className="w-5 h-5 rounded-full bg-white/10 text-white flex items-center justify-center font-bold text-[10px] flex-shrink-0 mt-0.5">2</span>
+                  <p>Tap the <strong>...</strong> menu &rarr; <strong>Add to other playlist</strong> &rarr; <strong>New playlist</strong>.</p>
+                </div>
+                <div className="flex items-start gap-2.5 p-2.5 rounded-lg bg-white/[0.03] border border-white/5">
+                  <span className="w-5 h-5 rounded-full bg-white/10 text-white flex items-center justify-center font-bold text-[10px] flex-shrink-0 mt-0.5">3</span>
+                  <p>Open the new playlist, tap <strong>Share</strong> &rarr; <strong>Copy link</strong> and paste here.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="p-4 border-t border-white/10 bg-white/[0.02] flex justify-end">
+            <button
+              onClick={onClose}
+              className="px-5 py-2 text-xs font-bold text-black bg-[#1ed760] rounded-xl hover:bg-[#1db954] transition-all cursor-pointer shadow-[0_0_15px_rgba(30,215,96,0.3)]"
+            >
+              Got it!
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
 function SettingsSection({
   title,
   subtitle,
@@ -293,6 +396,7 @@ export default function Home() {
   const [downloadingBatch, setDownloadingBatch] = useState(false);
   const [downloadProgress, setDownloadProgress] = useState({ done: 0, total: 0 });
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [likedHelpOpen, setLikedHelpOpen] = useState(false);
   const [settings, setSettings] = useState<AppSettings>(DEFAULT_SETTINGS);
   const [filterText, setFilterText] = useState('');
 
@@ -654,6 +758,18 @@ export default function Home() {
           </div>
         </form>
 
+        {/* ── Liked Songs Helper Badge ── */}
+        <div className="flex justify-center mt-2.5">
+          <button
+            type="button"
+            onClick={() => setLikedHelpOpen(true)}
+            className="inline-flex items-center gap-1.5 text-xs text-white/50 hover:text-[#1ed760] transition-colors py-1 px-3 rounded-full hover:bg-white/[0.04] border border-transparent hover:border-[#1db954]/20 cursor-pointer group"
+          >
+            <Heart className="w-3.5 h-3.5 text-[#1ed760] fill-[#1ed760]/20 group-hover:scale-110 transition-transform" />
+            <span>How to download your <strong>Liked Songs</strong> library</span>
+          </button>
+        </div>
+
         {/* ── Error State ── */}
         {error && (
           <div className="p-4 bg-red-500/10 border border-red-500/25 text-red-300 rounded-xl text-center text-sm animate-fade-in shadow-[0_0_20px_rgba(239,68,68,0.15)]">
@@ -900,6 +1016,12 @@ export default function Home() {
         onClose={() => setSettingsOpen(false)}
         settings={settings}
         onSettingsChange={updateSettings}
+      />
+
+      {/* ── Liked Songs Guide Modal ── */}
+      <LikedSongsGuideModal
+        open={likedHelpOpen}
+        onClose={() => setLikedHelpOpen(false)}
       />
     </main>
   );

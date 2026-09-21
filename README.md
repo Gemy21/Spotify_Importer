@@ -280,16 +280,44 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## 📖 Usage Guide
 
-1. **Import Any Link:**
-   - Paste any Spotify Playlist URL (e.g. `https://open.spotify.com/playlist/...`)
-   - Paste an Album URL or Track URL
-   - Or type a song query directly (e.g. `RealestK Bad`) to search
-2. **Hit "Fetch":**
-   - The engine automatically retrieves all tracks (even playlists with 600+ songs) along with their genuine 640×640 album covers.
-3. **Select & Download:**
-   - Click **Select All** or pick individual songs.
-   - Click **Download** on any track to download directly.
-   - Click **Download Selected** to batch-download all checked songs directly to your chosen folder using the File System Access API.
+### 1. General URLs & Search
+- **Playlists:** Paste any public Spotify playlist URL (e.g. `https://open.spotify.com/playlist/...`).
+- **Albums & Tracks:** Paste single track or complete album links.
+- **Search:** Simply type artist or track names directly to search with high-resolution results.
+
+---
+
+### 💚 How to Download Your Spotify "Liked Songs" (Step-by-Step)
+
+Spotify treats your **"Liked Songs"** library as a private personal collection without a standard public share link. Follow these **3 simple steps** to download your entire Liked Songs collection (even with 600+, 1,000+ songs!):
+
+#### Method 1: Using the Spotify Desktop App (Recommended - Takes 10 Seconds)
+1. **Open Spotify** on your computer (Windows or Mac desktop app).
+2. Go to your **"Liked Songs"** tab on the left sidebar.
+3. Click on any song in the list, then press:
+   - **Windows:** `Ctrl + A` (selects all songs in your library)
+   - **Mac:** `Cmd + A`
+4. **Right-click** on any highlighted song → select **"Add to playlist"** → **"Create playlist"** *(or drag and drop into a new playlist)*.
+5. In your left sidebar, right-click your newly created playlist → select **"Share"** → **"Copy link to playlist"**.
+6. Paste that link into **Spotify Importer** and click **Fetch** — all your liked songs will load with their real album covers ready for download!
+
+> 💡 **Tip:** If your new playlist doesn't load publicly, right-click the playlist in Spotify and ensure **"Make Public"** is selected.
+
+#### Method 2: On Mobile (iOS / Android)
+1. Open the Spotify mobile app and tap **Your Library** → **Liked Songs**.
+2. Tap the **three dots (`...`)** at the top right of the Liked Songs screen.
+3. Tap **"Add to other playlist"** → **"New playlist"**.
+4. Give it a name (e.g. *My Liked Songs*) and tap **Create**.
+5. Open your new playlist, tap the **Share** button (`...` or Share icon), and tap **"Copy Link"**.
+6. Paste the link into the app!
+
+---
+
+### 2. Batch Downloading to a Local Folder
+1. Once your playlist loads, click **Select All** (or check specific tracks).
+2. Click the glowing **Download Selected** button at the bottom.
+3. Your browser will prompt you to select a download destination folder on your computer (powered by the modern File System Access API).
+4. The engine downloads, converts, tags, and saves every file into that folder automatically!
 
 ---
 
