@@ -15,8 +15,10 @@
 
 ---
 
-### 🖥️ Application Preview (Importing 600+ Song Playlist)
-<img src="public/assets/playlist-preview.png" alt="Spotify Importer UI Preview" width="100%" style="border-radius: 12px; border: 1px solid rgba(29, 185, 84, 0.4); box-shadow: 0 0 25px rgba(29, 185, 84, 0.2);" />
+### 🖥️ Application Preview
+<p align="center">
+  <img src="public/assets/hero-preview.png" alt="Spotify Importer UI Preview" width="100%" style="border-radius: 12px; border: 1px solid rgba(29, 185, 84, 0.4); box-shadow: 0 0 35px rgba(29, 185, 84, 0.25);" />
+</p>
 
 </div>
 
