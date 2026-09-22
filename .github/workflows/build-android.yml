@@ -38,7 +38,7 @@ jobs:
 
       - name: Install Dependencies & Prepare Assets
         run: |
-          npm ci
+          npm install
           npm run build:android
 
       - name: Setup Android SDK
