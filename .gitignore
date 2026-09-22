@@ -50,4 +50,7 @@ android/build/
 android/.gradle/
 android/local.properties
 android/nodejs-assets/nodejs-project/node_modules/
+android/app/src/main/assets/nodejs-project/public/_next/
+android/app/src/main/assets/nodejs-project/public/index.html
+
 

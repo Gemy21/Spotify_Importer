@@ -5,10 +5,6 @@ on:
     branches:
       - android-app
       - main
-    paths:
-      - 'android/**'
-      - 'src/**'
-      - '.github/workflows/build-android.yml'
   workflow_dispatch:
 
 permissions:
@@ -29,55 +25,64 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.5'
+
       - name: Setup Node.js 20
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install Dependencies & Build Web UI
+      - name: Install Dependencies & Prepare Assets
         run: |
           npm ci
-          npm run build
-
-      - name: Prepare Node.js Project Assets for Android
-        run: |
-          mkdir -p android/app/src/main/assets/nodejs-project/public
-          # Copy web build output into android assets
-          if [ -d "out" ]; then
-            cp -r out/* android/app/src/main/assets/nodejs-project/public/
-          elif [ -d "public" ]; then
-            cp -r public/* android/app/src/main/assets/nodejs-project/public/
-          fi
-          # Copy nodejs-project backend files into assets
-          cp -r android/nodejs-assets/nodejs-project/* android/app/src/main/assets/nodejs-project/
+          npm run build:android
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Grant Execute Permission to Gradlew
-        run: |
-          cd android
-          chmod +x gradlew || true
-
       - name: Build Android APK
         run: |
           cd android
-          gradle wrapper
-          ./gradlew assembleDebug --stacktrace
+          gradle assembleDebug --stacktrace
+
+      - name: Rename APK for Release
+        run: |
+          mkdir -p release-artifacts
+          cp android/app/build/outputs/apk/debug/*.apk release-artifacts/SpotifyImporter-v1.0.0.apk
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: spotify-importer-debug-apk
-          path: android/app/build/outputs/apk/debug/*.apk
+          name: SpotifyImporter-v1.0.0
+          path: release-artifacts/SpotifyImporter-v1.0.0.apk
 
-      - name: Create GitHub Release
-        if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
+      - name: Create or Update GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: android/app/build/outputs/apk/debug/*.apk
-          name: Spotify Importer Android v${{ github.ref_name }}
+          files: release-artifacts/SpotifyImporter-v1.0.0.apk
+          tag_name: v1.0.0-android
+          name: Spotify Importer Android v1.0.0
+          body: |
+            ### 🎵 Spotify Importer for Android (APK)
+
+            This APK runs **100% locally on your Android device** with zero cloud servers required.
+
+            - **🚀 100% Keyless & Free**: No Spotify account or API credentials required.
+            - **📈 Unlimited Playlist Imports**: Fetches complete libraries with real album covers.
+            - **🎧 Studio Audio Downloader**: SpotDL matching algorithm for high quality audio.
+            - **🏷️ Automated ID3v2 Tagging**: Full metadata & 640×640 artwork embedded directly into audio.
+            - **📜 Synced Lyrics**: Time-synced `.lrc` and plain `.txt` lyrics.
+            - **📱 Local-First**: Runs 100% on your local phone with zero hosting needed.
+
+            #### 📲 Installation:
+            1. Download **`SpotifyImporter-v1.0.0.apk`** below.
+            2. Open the file on your Android device to install (allow "Install from Unknown Sources" if prompted).
+            3. Enjoy full Spotify importing directly on your phone!
           draft: false
           prerelease: false
-          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

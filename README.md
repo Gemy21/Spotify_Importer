@@ -46,7 +46,7 @@ In 2026, Spotify made their official Web API require paid Spotify Premium accoun
 │                                KEYLESS METADATA ENGINE                                 │
 ├────────────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                        │
-│  1. Anonymous Session Bootstrap                                                       │
+│  1. Anonymous Session Bootstrap                                                        │
 │     The engine issues a lightweight handshake to Spotify's public web embed surface    │
 │     to generate an ephemeral client token without any login credentials.               │
 │                                                                                        │
