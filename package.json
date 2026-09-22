@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:android": "next build && node scripts/prepare-android.js",
     "start": "next start",
     "lint": "eslint"
   },

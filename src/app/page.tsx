@@ -743,17 +743,17 @@ export default function Home() {
             <input
               type="text"
               required
-              placeholder="Paste Spotify track / playlist / album URL or song title..."
+              placeholder="Paste Spotify URL or track name..."
               value={url}
               onChange={e => setUrl(e.target.value)}
-              className="w-full bg-transparent border-none py-4 px-3 text-white placeholder:text-white/40 focus:outline-none focus:ring-0 text-sm sm:text-base"
+              className="w-full bg-transparent border-none py-3 sm:py-4 px-2.5 sm:px-3 text-white placeholder:text-white/40 focus:outline-none focus:ring-0 text-xs sm:text-base"
             />
             <button
               type="submit"
               disabled={loading || !url.trim()}
-              className="mr-2 px-6 py-2.5 spotify-btn-glow text-black font-extrabold rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-2 text-sm cursor-pointer shadow-[0_0_20px_rgba(29,185,84,0.4)]"
+              className="mr-1.5 sm:mr-2 px-4 sm:px-6 py-2 sm:py-2.5 spotify-btn-glow text-black font-extrabold rounded-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm cursor-pointer shadow-[0_0_20px_rgba(29,185,84,0.4)] whitespace-nowrap"
             >
-              {loading ? <Loader2 className="w-5 h-5 animate-spin text-black" /> : 'Fetch'}
+              {loading ? <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin text-black" /> : 'Fetch'}
             </button>
           </div>
         </form>
@@ -951,8 +951,8 @@ export default function Home() {
 
         {/* ── Floating Batch Download Bar with Spotify Glowing CTA ── */}
         {selectedTracks.size > 0 && (
-          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 w-full max-w-xl px-4 z-30 animate-fade-in-up">
-            <div className="bg-[#121212]/95 backdrop-blur-2xl p-4 rounded-2xl border border-[#1db954]/40 shadow-[0_0_45px_rgba(0,0,0,0.9),0_0_25px_rgba(29,185,84,0.25)]">
+          <div className="fixed bottom-3 sm:bottom-6 left-1/2 -translate-x-1/2 w-full max-w-xl px-3 sm:px-4 z-30 animate-fade-in-up">
+            <div className="bg-[#121212]/95 backdrop-blur-2xl p-3.5 sm:p-4 rounded-2xl border border-[#1db954]/40 shadow-[0_0_45px_rgba(0,0,0,0.9),0_0_25px_rgba(29,185,84,0.25)]">
               {/* Progress bar for batch */}
               {downloadingBatch && downloadProgress.total > 0 && (
                 <div className="mb-3">
@@ -972,16 +972,16 @@ export default function Home() {
                 </div>
               )}
 
-              <div className="flex items-center justify-between">
-                <span className="text-white/90 font-medium text-sm px-1 flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#1ed760] shadow-[0_0_8px_rgba(30,215,96,0.8)]" />
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-white/90 font-medium text-xs sm:text-sm px-1 flex items-center gap-1.5 sm:gap-2">
+                  <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#1ed760] shadow-[0_0_8px_rgba(30,215,96,0.8)]" />
                   {selectedTracks.size} {selectedTracks.size === 1 ? 'song' : 'songs'} selected
                 </span>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 sm:gap-2">
                   {!downloadingBatch && (
                     <button
                       onClick={() => setSelectedTracks(new Set())}
-                      className="px-3 py-2 text-xs text-white/50 hover:text-white transition-colors cursor-pointer"
+                      className="px-2.5 sm:px-3 py-1.5 sm:py-2 text-xs text-white/50 hover:text-white transition-colors cursor-pointer"
                     >
                       Clear
                     </button>
@@ -989,16 +989,16 @@ export default function Home() {
                   <button
                     onClick={handleBatchDownload}
                     disabled={downloadingBatch}
-                    className="px-5 py-2.5 spotify-btn-glow text-black font-extrabold rounded-xl transition-all disabled:opacity-50 flex items-center gap-2 text-sm cursor-pointer shadow-[0_0_20px_rgba(29,185,84,0.4)]"
+                    className="px-3.5 sm:px-5 py-2 sm:py-2.5 spotify-btn-glow text-black font-extrabold rounded-xl transition-all disabled:opacity-50 flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm cursor-pointer shadow-[0_0_20px_rgba(29,185,84,0.4)] whitespace-nowrap"
                   >
                     {downloadingBatch ? (
                       <>
-                        <Loader2 className="w-4 h-4 animate-spin text-black" />
+                        <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 animate-spin text-black" />
                         Downloading...
                       </>
                     ) : (
                       <>
-                        <Download className="w-4 h-4 text-black" />
+                        <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-black" />
                         Download Selected
                       </>
                     )}

@@ -1,0 +1,83 @@
+name: Build Android APK
+
+on:
+  push:
+    branches:
+      - android-app
+      - main
+    paths:
+      - 'android/**'
+      - 'src/**'
+      - '.github/workflows/build-android.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build & Release Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install Dependencies & Build Web UI
+        run: |
+          npm ci
+          npm run build
+
+      - name: Prepare Node.js Project Assets for Android
+        run: |
+          mkdir -p android/app/src/main/assets/nodejs-project/public
+          # Copy web build output into android assets
+          if [ -d "out" ]; then
+            cp -r out/* android/app/src/main/assets/nodejs-project/public/
+          elif [ -d "public" ]; then
+            cp -r public/* android/app/src/main/assets/nodejs-project/public/
+          fi
+          # Copy nodejs-project backend files into assets
+          cp -r android/nodejs-assets/nodejs-project/* android/app/src/main/assets/nodejs-project/
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Grant Execute Permission to Gradlew
+        run: |
+          cd android
+          chmod +x gradlew || true
+
+      - name: Build Android APK
+        run: |
+          cd android
+          gradle wrapper
+          ./gradlew assembleDebug --stacktrace
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: spotify-importer-debug-apk
+          path: android/app/build/outputs/apk/debug/*.apk
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: android/app/build/outputs/apk/debug/*.apk
+          name: Spotify Importer Android v${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
