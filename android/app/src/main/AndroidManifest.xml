@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.spotifyimporter.app">
 
-    <!-- Permissions for local server and downloading audio files -->
+    <!-- Network access for Spotify API calls made from the WebView -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Storage for downloading audio files (Android <= 9 only) -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
 
     <application
         android:allowBackup="true"
@@ -17,9 +17,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SpotifyImporter"
-        android:usesCleartextTraffic="true"
         tools:targetApi="34">
 
+        <!-- Main activity — loads the bundled Next.js static app via WebViewAssetLoader -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -31,7 +31,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <!-- Support opening Spotify links directly into the app -->
+            <!-- Deep link: open Spotify URLs directly in the app -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -40,9 +40,6 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".NodeServerService"
-            android:exported="false" />
     </application>
 
 </manifest>

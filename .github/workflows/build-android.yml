@@ -19,41 +19,62 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Java 17
+      - name: Setup Java 21
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '8.5'
-
-      - name: Setup Node.js 20
+      - name: Setup Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
-      - name: Install Dependencies & Prepare Assets
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Android Assets
+        run: npm run build:android
+        env:
+          NODE_ENV: production
+
+      - name: Verify Assets Were Bundled
         run: |
-          npm install
-          npm run build:android
+          echo "=== Verifying Android assets ==="
+          if [ ! -f "android/app/src/main/assets/www/index.html" ]; then
+            echo "ERROR: index.html missing from assets! Build will produce a black screen."
+            exit 1
+          fi
+          echo "✅ index.html found"
+          echo "=== Asset tree (first 50 lines) ==="
+          find android/app/src/main/assets/www -type f | head -50
+          echo "=== Total files ==="
+          find android/app/src/main/assets/www -type f | wc -l
 
       - name: Accept Android SDK Licenses
         run: |
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
+      - name: Download Gradle Wrapper JAR
+        run: |
+          mkdir -p android/gradle/wrapper
+          curl -L "https://github.com/gradle/gradle/raw/v8.5.0/gradle/wrapper/gradle-wrapper.jar" \
+            -o android/gradle/wrapper/gradle-wrapper.jar
+
+      - name: Make Gradlew Executable
+        run: chmod +x android/gradlew
+
       - name: Build Android APK
         run: |
           cd android
-          gradle assembleDebug --stacktrace
+          ./gradlew assembleDebug --stacktrace
 
       - name: Rename APK for Release
         run: |
           mkdir -p release-artifacts
-          cp android/app/build/outputs/apk/debug/*.apk release-artifacts/SpotifyImporter-v1.0.0.apk
+          cp android/app/build/outputs/apk/debug/app-debug.apk release-artifacts/SpotifyImporter-v1.0.0.apk
+          echo "APK size: $(du -sh release-artifacts/SpotifyImporter-v1.0.0.apk)"
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
@@ -70,19 +91,17 @@ jobs:
           body: |
             ### 🎵 Spotify Importer for Android (APK)
 
-            This APK runs **100% locally on your Android device** with zero cloud servers required.
+            This APK runs **100% locally on your Android device** — no cloud servers, no accounts required.
 
-            - **🚀 100% Keyless & Free**: No Spotify account or API credentials required.
-            - **📈 Unlimited Playlist Imports**: Fetches complete libraries with real album covers.
-            - **🎧 Studio Audio Downloader**: SpotDL matching algorithm for high quality audio.
-            - **🏷️ Automated ID3v2 Tagging**: Full metadata & 640×640 artwork embedded directly into audio.
-            - **📜 Synced Lyrics**: Time-synced `.lrc` and plain `.txt` lyrics.
-            - **📱 Local-First**: Runs 100% on your local phone with zero hosting needed.
+            - **🚀 Zero Setup**: No Spotify API credentials needed.
+            - **📋 Full Playlist Browser**: Fetch and browse complete Spotify libraries.
+            - **📱 Native Android App**: Wrapped in a native WebView — feels like a real app.
+            - **🏷️ Local-First**: Runs 100% on your phone with zero hosting needed.
 
             #### 📲 Installation:
             1. Download **`SpotifyImporter-v1.0.0.apk`** below.
-            2. Open the file on your Android device to install (allow "Install from Unknown Sources" if prompted).
-            3. Enjoy full Spotify importing directly on your phone!
+            2. Open the file on your Android device (allow "Install from Unknown Sources" if prompted).
+            3. Open the app and start browsing your Spotify playlists!
           draft: false
           prerelease: false
         env:
