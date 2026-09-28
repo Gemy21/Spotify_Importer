@@ -6,8 +6,8 @@ import com.spotifyimporter.app.model.AudioFormat
 import com.spotifyimporter.app.model.AudioQuality
 import com.spotifyimporter.app.model.AudioSource
 import com.spotifyimporter.app.model.DownloadSettings
-import com.yausername.youtubedl_android.YoutubeDL
-import com.yausername.youtubedl_android.YoutubeDLRequest
+import com.yausername.youtubedl.YoutubeDL
+import com.yausername.youtubedl.YoutubeDLRequest
 import java.io.File
 
 class YtDlpDownloader(private val context: Context) {
