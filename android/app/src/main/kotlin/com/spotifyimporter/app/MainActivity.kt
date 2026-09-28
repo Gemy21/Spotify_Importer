@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
     private val spotifyRepo = SpotifyRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate()
+        super.onCreate(savedInstanceState)
 
         queueManager = DownloadQueueManager(applicationContext)
 

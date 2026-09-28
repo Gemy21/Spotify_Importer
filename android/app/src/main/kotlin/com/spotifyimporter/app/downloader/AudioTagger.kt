@@ -1,6 +1,6 @@
 package com.spotifyimporter.app.downloader
 
-import com.mpatric.mp3agic.Id3v24Tag
+import com.mpatric.mp3agic.ID3v24Tag
 import com.mpatric.mp3agic.Mp3File
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -21,7 +21,7 @@ class AudioTagger {
     ) {
         try {
             val mp3file = Mp3File(inputFile.absolutePath)
-            val tag = if (mp3file.hasId3v2Tag()) mp3file.id3v2Tag else Id3v24Tag()
+            val tag = if (mp3file.hasId3v2Tag()) mp3file.id3v2Tag else ID3v24Tag()
 
             tag.title = title
             tag.artist = artist
@@ -48,9 +48,6 @@ class AudioTagger {
                 }
             }
 
-            if (outputFile.exists()) {
-                outputFile.delete()
-            }
             mp3file.id3v2Tag = tag
             mp3file.save(outputFile.absolutePath)
         } catch (e: Exception) {

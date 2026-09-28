@@ -1,5 +1,5 @@
 <resources>
-    <style name="Theme.SpotifyImporter" parent="@android:style/Theme.Material.NoActionBar">
+    <style name="Theme.SpotifyImporter" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:statusBarColor">@color/spotify_black</item>
         <item name="android:navigationBarColor">@color/spotify_black</item>
         <item name="android:windowBackground">@color/spotify_black</item>
