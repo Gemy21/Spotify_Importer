@@ -48,7 +48,7 @@ class YtDlpDownloader(private val context: Context) {
 
         Log.d("YtDlpDownloader", "Executing yt-dlp request for: $searchTarget")
 
-        YoutubeDL.getInstance().execute(request) { progress: Float, _ ->
+        YoutubeDL.getInstance().execute(request) { progress: Float, etaInSeconds: Long, line: String ->
             onProgress(progress.toInt().coerceIn(0, 99))
         }
 
