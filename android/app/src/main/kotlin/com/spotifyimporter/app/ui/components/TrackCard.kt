@@ -37,7 +37,7 @@ fun TrackCard(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 4.dp)
-            .clickable { onToggleSelect(track.id) },
+            .clickable { onToggleSelect(track.uid) },
         shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
@@ -49,10 +49,9 @@ fun TrackCard(
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Checkbox
             Checkbox(
                 checked = track.isSelected,
-                onCheckedChange = { onToggleSelect(track.id) },
+                onCheckedChange = { onToggleSelect(track.uid) },
                 colors = CheckboxDefaults.colors(
                     checkedColor = SpotifyGreen,
                     uncheckedColor = TextMuted
@@ -61,7 +60,6 @@ fun TrackCard(
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            // Cover Art Image
             Box(
                 modifier = Modifier
                     .size(48.dp)
@@ -88,10 +86,7 @@ fun TrackCard(
 
             Spacer(modifier = Modifier.width(12.dp))
 
-            // Track Details
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = track.name,
                     style = MaterialTheme.typography.titleMedium.copy(
@@ -119,8 +114,9 @@ fun TrackCard(
                     )
                 }
 
-                // Error message
-                AnimatedVisibility(visible = track.status == DownloadStatus.ERROR && track.errorMessage != null) {
+                AnimatedVisibility(
+                    visible = track.status == DownloadStatus.ERROR && track.errorMessage != null
+                ) {
                     Text(
                         text = track.errorMessage ?: "",
                         style = MaterialTheme.typography.bodySmall,
@@ -134,9 +130,8 @@ fun TrackCard(
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            // Status Indicator
             Box(
-                modifier = Modifier.size(36.dp),
+                modifier = Modifier.size(40.dp),
                 contentAlignment = Alignment.Center
             ) {
                 when (track.status) {
@@ -151,14 +146,14 @@ fun TrackCard(
                             )
                         }
                     }
-                    DownloadStatus.QUEUED -> {
+                    DownloadStatus.QUEUED, DownloadStatus.SEARCHING -> {
                         CircularProgressIndicator(
                             modifier = Modifier.size(20.dp),
                             color = SpotifyGreen,
                             strokeWidth = 2.dp
                         )
                     }
-                    DownloadStatus.SEARCHING, DownloadStatus.DOWNLOADING, DownloadStatus.TAGGING -> {
+                    DownloadStatus.DOWNLOADING, DownloadStatus.TAGGING -> {
                         CircularProgressIndicator(
                             progress = track.progress / 100f,
                             modifier = Modifier.size(28.dp),
@@ -168,12 +163,21 @@ fun TrackCard(
                         )
                     }
                     DownloadStatus.COMPLETED -> {
-                        Icon(
-                            imageVector = Icons.Default.CheckCircle,
-                            contentDescription = "Completed",
-                            tint = SpotifyGreen,
-                            modifier = Modifier.size(24.dp)
-                        )
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Icon(
+                                imageVector = Icons.Default.CheckCircle,
+                                contentDescription = "Saved",
+                                tint = SpotifyGreen,
+                                modifier = Modifier.size(22.dp)
+                            )
+                            if (track.savedName.isNotEmpty()) {
+                                Text(
+                                    text = "Saved",
+                                    fontSize = 9.sp,
+                                    color = SpotifyGreen
+                                )
+                            }
+                        }
                     }
                     DownloadStatus.ERROR -> {
                         Icon(

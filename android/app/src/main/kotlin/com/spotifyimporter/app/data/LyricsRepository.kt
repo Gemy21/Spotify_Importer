@@ -21,14 +21,15 @@ class LyricsRepository {
             val url = "https://lrclib.net/api/get?artist_name=$encodedArtist&track_name=$encodedTrack"
 
             val req = Request.Builder().url(url).build()
-            val res = client.newCall(req).execute()
-            if (res.isSuccessful) {
-                val body = res.body?.string() ?: ""
-                val json = JSONObject(body)
-                val synced = json.optString("syncedLyrics", "").ifEmpty { null }
-                val plain = json.optString("plainLyrics", "").ifEmpty { null }
-                if (synced != null || plain != null) {
-                    return@withContext LyricsResult(syncedLyrics = synced, plainLyrics = plain)
+            client.newCall(req).execute().use { res ->
+                if (res.isSuccessful) {
+                    val body = res.body?.string() ?: ""
+                    val json = JSONObject(body)
+                    val synced = json.optString("syncedLyrics", "").ifEmpty { null }
+                    val plain = json.optString("plainLyrics", "").ifEmpty { null }
+                    if (synced != null || plain != null) {
+                        return@withContext LyricsResult(syncedLyrics = synced, plainLyrics = plain)
+                    }
                 }
             }
         } catch (e: Exception) {
@@ -41,15 +42,16 @@ class LyricsRepository {
             val url = "https://lrclib.net/api/search?q=$query"
 
             val req = Request.Builder().url(url).build()
-            val res = client.newCall(req).execute()
-            if (res.isSuccessful) {
-                val body = res.body?.string() ?: ""
-                val array = JSONArray(body)
-                if (array.length() > 0) {
-                    val match = array.getJSONObject(0)
-                    val synced = match.optString("syncedLyrics", "").ifEmpty { null }
-                    val plain = match.optString("plainLyrics", "").ifEmpty { null }
-                    return@withContext LyricsResult(syncedLyrics = synced, plainLyrics = plain)
+            client.newCall(req).execute().use { res ->
+                if (res.isSuccessful) {
+                    val body = res.body?.string() ?: ""
+                    val array = JSONArray(body)
+                    if (array.length() > 0) {
+                        val match = array.getJSONObject(0)
+                        val synced = match.optString("syncedLyrics", "").ifEmpty { null }
+                        val plain = match.optString("plainLyrics", "").ifEmpty { null }
+                        return@withContext LyricsResult(syncedLyrics = synced, plainLyrics = plain)
+                    }
                 }
             }
         } catch (e: Exception) {

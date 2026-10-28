@@ -1,6 +1,8 @@
 package com.spotifyimporter.app.ui.components
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,6 +19,8 @@ import com.spotifyimporter.app.ui.theme.TextSecondary
 fun SettingsSheet(
     settings: DownloadSettings,
     onSettingsChanged: (DownloadSettings) -> Unit,
+    onUpdateEngine: () -> Unit,
+    isUpdatingEngine: Boolean,
     onDismiss: () -> Unit
 ) {
     ModalBottomSheet(
@@ -138,6 +142,53 @@ fun SettingsSheet(
                     onCheckedChange = { onSettingsChanged(settings.copy(saveLrcFile = it)) },
                     colors = SwitchDefaults.colors(checkedThumbColor = SpotifyGreen)
                 )
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // Storage info
+            Text(text = "Storage", style = MaterialTheme.typography.titleMedium, color = TextSecondary)
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "Audio is saved to Music/SpotifyImporter and appears in your music player. " +
+                    "Lyrics sidecars are saved alongside it when possible.",
+                style = MaterialTheme.typography.bodySmall,
+                color = TextSecondary
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // Engine maintenance
+            Text(text = "Download Engine", style = MaterialTheme.typography.titleMedium, color = TextSecondary)
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "If downloads start failing, update the bundled yt-dlp engine to the latest release.",
+                style = MaterialTheme.typography.bodySmall,
+                color = TextSecondary
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            OutlinedButton(
+                onClick = onUpdateEngine,
+                enabled = !isUpdatingEngine,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                if (isUpdatingEngine) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(16.dp),
+                        strokeWidth = 2.dp,
+                        color = SpotifyGreen
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Updating…")
+                } else {
+                    Icon(
+                        imageVector = Icons.Default.Refresh,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Update download engine")
+                }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
