@@ -312,7 +312,9 @@ fun MainScreen(
                 modifier = Modifier.align(Alignment.BottomCenter)
             ) {
                 Surface(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .navigationBarsPadding(),
                     color = SurfaceDark,
                     tonalElevation = 8.dp
                 ) {

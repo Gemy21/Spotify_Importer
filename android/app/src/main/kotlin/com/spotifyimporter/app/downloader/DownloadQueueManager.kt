@@ -150,10 +150,13 @@ class DownloadQueueManager private constructor(context: Context) {
 
                 var lyrics: String? = null
                 var syncedLyrics: String? = null
+                var album = track.album
                 if (settings.embedLyrics || settings.saveLrcFile) {
                     val result = lyricsRepo.fetchLyrics(track.artist, track.name)
                     syncedLyrics = result.syncedLyrics
                     lyrics = result.plainLyrics ?: syncedLyrics
+                    // Single-track imports carry no album; LRCLIB reports one for most tracks.
+                    if (album.isBlank()) album = result.albumName.orEmpty()
                 }
 
                 updateTrack(track.uid) {
@@ -164,7 +167,7 @@ class DownloadQueueManager private constructor(context: Context) {
                     processId = track.uid,
                     artist = track.artist,
                     title = track.name,
-                    album = track.album,
+                    album = album,
                     coverUrl = coverUrl.ifBlank { null },
                     lyrics = lyrics,
                     syncedLyrics = syncedLyrics,
@@ -187,7 +190,7 @@ class DownloadQueueManager private constructor(context: Context) {
                     mimeType = downloaded.mimeType,
                     title = track.name,
                     artist = track.artist,
-                    album = track.album
+                    album = album
                 )
                 downloaded.file.delete()
 

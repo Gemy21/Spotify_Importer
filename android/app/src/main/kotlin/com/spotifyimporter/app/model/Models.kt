@@ -85,5 +85,7 @@ enum class AudioQuality(val value: String, val bitrate: String) {
 
 data class LyricsResult(
     val syncedLyrics: String? = null,
-    val plainLyrics: String? = null
+    val plainLyrics: String? = null,
+    /** Album reported by LRCLIB, used to fill a missing album tag on single-track imports. */
+    val albumName: String? = null
 )

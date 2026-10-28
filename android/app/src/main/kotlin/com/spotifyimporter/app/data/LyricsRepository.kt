@@ -28,7 +28,11 @@ class LyricsRepository {
                     val synced = json.optString("syncedLyrics", "").ifEmpty { null }
                     val plain = json.optString("plainLyrics", "").ifEmpty { null }
                     if (synced != null || plain != null) {
-                        return@withContext LyricsResult(syncedLyrics = synced, plainLyrics = plain)
+                        return@withContext LyricsResult(
+                            syncedLyrics = synced,
+                            plainLyrics = plain,
+                            albumName = json.optString("albumName", "").ifEmpty { null }
+                        )
                     }
                 }
             }
@@ -50,7 +54,11 @@ class LyricsRepository {
                         val match = array.getJSONObject(0)
                         val synced = match.optString("syncedLyrics", "").ifEmpty { null }
                         val plain = match.optString("plainLyrics", "").ifEmpty { null }
-                        return@withContext LyricsResult(syncedLyrics = synced, plainLyrics = plain)
+                        return@withContext LyricsResult(
+                            syncedLyrics = synced,
+                            plainLyrics = plain,
+                            albumName = match.optString("albumName", "").ifEmpty { null }
+                        )
                     }
                 }
             }
