@@ -323,5 +323,50 @@ Spotify treats your **"Liked Songs"** library as a private personal collection w
 
 ---
 
+## 📱 Android App (Native)
+
+The `android/` folder contains a fully native Kotlin + Jetpack Compose app. It runs entirely on-device — no Node.js server, no Python, no Spotify credentials.
+
+### What works on mobile
+
+- **Full playlist import (no 100-track cap):** uses Spotify's internal Pathfinder GraphQL endpoint with an anonymous embed token, then falls back to the public embed page. The persisted-query hash is refreshed automatically from the web player if Spotify rotates it.
+- **Real 640×640 song-level artwork** pulled from `albumOfTrack.coverArt.sources`.
+- **Albums, tracks, artist top-tracks and free-text search** (iTunes public API).
+- **On-device yt-dlp + FFmpeg** (YoutubeDL-Android) with MP3 / M4A / OPUS and selectable bitrates.
+- **In-app engine updates**: Settings → *Update download engine* refreshes yt-dlp from GitHub when YouTube changes break extraction.
+- **ID3v2 tagging** (title, artist, album, cover art, lyrics) via mp3agic.
+- **Synced lyrics** from LRCLIB, embedded in MP3 tags and saved as `.lrc`/`.txt`.
+- **Public `Music/SpotifyImporter` output** through MediaStore (Android 10+) so tracks show up in every music player immediately.
+- **Background downloads** in a foreground service with progress notification, plus cancel/retry.
+- **Deep links and share sheet**: opening or sharing a Spotify link launches the app and imports it.
+- **Persistent settings** (source, format, quality, lyrics options).
+
+### Build the APK
+
+```bash
+cd android
+./gradlew assembleDebug        # Windows: gradlew.bat assembleDebug
+```
+
+Or, from the repo root: `npm run build:android` (launches the Gradle wrapper for you).
+
+The APK is written to `android/app/build/outputs/apk/debug/app-debug.apk`.
+
+> Requires JDK 17 and Android SDK 34. If `gradle-wrapper.jar` is missing on a fresh clone, open the project in Android Studio once (or run `gradle wrapper`) — the CI workflow downloads it automatically.
+
+The CI workflow at `.github/workflows/build-android.yml` builds and publishes the APK on every push to `android-app`/`main`.
+
+### Project layout
+
+```
+android/app/src/main/kotlin/com/spotifyimporter/app/
+├── data/          SpotifyRepository (Pathfinder + embed), LyricsRepository, SettingsStore
+├── downloader/    DownloadQueueManager, DownloadService, YtDlpDownloader, MediaStoreSaver, AudioTagger
+├── model/         Track, PlaylistInfo, DownloadSettings
+└── ui/            Compose screens, TrackCard, SettingsSheet, theme
+```
+
+---
+
 ## 📄 License
 MIT License. Built for educational and personal use. All music rights belong to their respective copyright holders.
