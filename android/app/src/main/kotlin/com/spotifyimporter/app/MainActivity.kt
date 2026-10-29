@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
 import com.spotifyimporter.app.data.SpotifyRepository
 import com.spotifyimporter.app.downloader.DownloadQueueManager
 import com.spotifyimporter.app.ui.screens.MainScreen
@@ -26,6 +27,12 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Let the aurora canvas run edge to edge; content keeps its own insets.
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            window.isNavigationBarContrastEnforced = false
+        }
 
         queueManager = DownloadQueueManager.getInstance(applicationContext)
         pendingUrl = extractSharedUrl(intent)
